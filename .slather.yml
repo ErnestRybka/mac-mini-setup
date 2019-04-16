@@ -1,6 +1,6 @@
 coverage_service: cobertura_xml
 xcodeproj: ./Velocigene.xcodeproj
-scheme: Velocigene
+scheme: Pods-Velocigene
 output_directory: ./test-reports
 configuration: Release
 ignore:
