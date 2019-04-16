@@ -143,7 +143,7 @@ function runCommand() {
 ## COMMAND LINE OPTIONS
 vflag="on"
 nflag=""
-unittests="off"
+unittests="on"
 swiftlint="on"
 tailor="off"
 lizard="on"
@@ -335,7 +335,7 @@ if [ "$vflag" = "on" ]; then
     slatherCmd+=( --input-format profdata $excludedCommandLineFlags --cobertura-xml --output-directory sonar-reports)
 
     if [[ ! -z "$workspaceFile" ]]; then
-        slatherCmd+=( --workspace "$workspaceFile")
+        slatherCmd+=( --verbose --workspace "$workspaceFile")
     fi
     slatherCmd+=( --binary-file /Users/jenkins/Public/workspace/test-jobs/er-mobile-app-sonar/build_result/Pods_Velocigene.framework/Pods_Velocigene)
     slatherCmd+=( --scheme "$appScheme" "$firstProject")
