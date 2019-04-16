@@ -339,7 +339,7 @@ if [ "$vflag" = "on" ]; then
         slatherCmd+=( --verbose --workspace "$workspaceFile")
     fi
     slatherCmd+=( --build-directory /Users/jenkins/Library/Developer/Xcode/DerivedData/)
-    slatherCmd+=( --binary-file /Users/jenkins/Public/workspace/test-jobs/er-mobile-app-sonar/build_result/Pods_Velocigene.framework/Pods_Velocigene)
+    slatherCmd+=( --binary-file /Users/jenkins/Public/workspace/test-jobs/er-mobile-app-sonar/build_result/Pods_VelocigeneTests.framework/Pods_VelocigeneTests)
     slatherCmd+=( --scheme "$appScheme" "$firstProject")
     
 
