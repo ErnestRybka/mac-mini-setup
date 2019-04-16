@@ -337,7 +337,7 @@ if [ "$vflag" = "on" ]; then
     if [[ ! -z "$workspaceFile" ]]; then
         slatherCmd+=( --workspace "$workspaceFile")
     fi
-    slatherCmd+=( --source-directory /Users/jenkins/Public/workspace/test-jobs/er-mobile-app-sonar/build_result)
+    slatherCmd+=( --binary-file /Users/jenkins/Public/workspace/test-jobs/er-mobile-app-sonar/build_result/Pods_Velocigene.framework/Pods_Velocigene)
     slatherCmd+=( --scheme "$appScheme" "$firstProject")
     
 
