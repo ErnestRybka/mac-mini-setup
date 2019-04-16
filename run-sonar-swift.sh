@@ -302,6 +302,7 @@ if [ "$unittests" = "on" ]; then
     if [[ ! -z "$destinationSimulator" ]]; then
         buildCmd+=(-destination "$destinationSimulator" -destination-timeout 10)
     fi
+    buildCmd+=(CONFIGURATION_BUILD_DIR=/Users/jenkins/Public/workspace/test-jobs/er-mobile-app-sonar/build_result)
 fi
 if [ "$vflag" = "on" ]; then
 
