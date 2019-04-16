@@ -338,6 +338,7 @@ if [ "$vflag" = "on" ]; then
         slatherCmd+=( --workspace "$workspaceFile")
     fi
     slatherCmd+=( --scheme "$appScheme" "$firstProject")
+    slatherCmd+=(CONFIGURATION_BUILD_DIR=/Users/jenkins/Public/workspace/test-jobs/er-mobile-app-sonar/build_result)
 
     echo "${slatherCmd[@]}"
 
