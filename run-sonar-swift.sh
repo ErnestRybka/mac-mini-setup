@@ -292,7 +292,7 @@ if [ "$unittests" = "on" ]; then
     echo "<?xml version='1.0' ?><!DOCTYPE coverage SYSTEM 'http://cobertura.sourceforge.net/xml/coverage-03.dtd'><coverage><sources></sources><packages></packages></coverage>" > sonar-reports/coverage-swift.xml
 
     echo -n 'Running surefire'
-    buildCmd=($XCODEBUILD_CMD test-without-building)
+    buildCmd=($XCODEBUILD_CMD test)
     if [[ ! -z "$workspaceFile" ]]; then
         buildCmd+=(-workspace "$workspaceFile")
     elif [[ ! -z "$projectFile" ]]; then
@@ -302,7 +302,6 @@ if [ "$unittests" = "on" ]; then
     if [[ ! -z "$destinationSimulator" ]]; then
         buildCmd+=(-destination "$destinationSimulator" -destination-timeout 10)
     fi
-    buildCmd+=(CONFIGURATION_BUILD_DIR=/Users/jenkins/Public/workspace/test-jobs/er-mobile-app-sonar/build_result)
 fi
 if [ "$vflag" = "on" ]; then
 
