@@ -339,7 +339,6 @@ if [ "$vflag" = "on" ]; then
         slatherCmd+=( --verbose --workspace "$workspaceFile")
     fi
     slatherCmd+=( --scheme "$appScheme" "$firstProject")
-    slatherCmd+=( --scheme "$appScheme" "$firstProject")
     
 
     echo "${slatherCmd[@]}"
