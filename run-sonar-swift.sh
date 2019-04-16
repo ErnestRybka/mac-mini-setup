@@ -143,7 +143,7 @@ function runCommand() {
 ## COMMAND LINE OPTIONS
 vflag="on"
 nflag=""
-unittests="off"
+unittests="on"
 swiftlint="on"
 tailor="off"
 lizard="on"
@@ -292,7 +292,7 @@ if [ "$unittests" = "on" ]; then
     echo "<?xml version='1.0' ?><!DOCTYPE coverage SYSTEM 'http://cobertura.sourceforge.net/xml/coverage-03.dtd'><coverage><sources></sources><packages></packages></coverage>" > sonar-reports/coverage-swift.xml
 
     echo -n 'Running surefire'
-    buildCmd=($XCODEBUILD_CMD test)
+    buildCmd=($XCODEBUILD_CMD test-without-building)
     if [[ ! -z "$workspaceFile" ]]; then
         buildCmd+=(-workspace "$workspaceFile")
     elif [[ ! -z "$projectFile" ]]; then
@@ -337,6 +337,7 @@ if [ "$vflag" = "on" ]; then
     if [[ ! -z "$workspaceFile" ]]; then
         slatherCmd+=( --verbose --workspace "$workspaceFile")
     fi
+    slatherCmd+=( --scheme "$appScheme" "$firstProject")
     slatherCmd+=( --scheme "$appScheme" "$firstProject")
     
 
