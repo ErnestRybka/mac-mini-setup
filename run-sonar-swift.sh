@@ -143,7 +143,7 @@ function runCommand() {
 ## COMMAND LINE OPTIONS
 vflag="on"
 nflag=""
-unittests="on"
+unittests="off"
 swiftlint="on"
 tailor="off"
 lizard="on"
@@ -303,8 +303,8 @@ if [ "$unittests" = "on" ]; then
         buildCmd+=(-destination "$destinationSimulator" -destination-timeout 10)
     fi
 fi
-
 if [ "$vflag" = "on" ]; then
+
     runCommand  sonar-reports/xcodebuild.log "${buildCmd[@]}"
     cat sonar-reports/xcodebuild.log  | $XCPRETTY_CMD -t --report junit
     mv build/reports/junit.xml sonar-reports/TEST-report.xml
@@ -321,7 +321,6 @@ if [ "$vflag" = "on" ]; then
 	      done < tmpFileRunSonarSh2
 	      rm -rf tmpFileRunSonarSh2
     fi
-
     if [ "$vflag" = "on" ]; then
 	      echo "Command line exclusion flags for slather is:$excludedCommandLineFlags"
     fi
@@ -367,6 +366,78 @@ if [ "$swiftlint" = "on" ]; then
 
 else
 	echo 'Skipping SwiftLint (test purposes only!)'
+fi
+
+# Tailor
+if [ "$tailor" = "on" ]; then
+	if hash $TAILOR_CMD 2>/dev/null; then
+		echo -n 'Running Tailor...'
+
+		# Build the --include flags
+		currentDirectory=${PWD##*/}
+		echo "$srcDirs" | sed -n 1'p' | tr ',' '\n' > tmpFileRunSonarSh
+		while read word; do
+
+			  # Run tailor command
+		    $TAILOR_CMD $tailorConfiguration "$word" > sonar-reports/"$(echo $word | sed 's/\//_/g')"-tailor.txt
+
+		done < tmpFileRunSonarSh
+		rm -rf tmpFileRunSonarSh
+	else
+		echo "Skipping Tailor (not installed!)"
+	fi
+
+else
+	echo 'Skipping Tailor!'
+fi
+#FauxPas
+if [ "$fauxpas" = "on" ] && [ "$hasObjC" = "yes" ]; then
+    hash fauxpas 2>/dev/null
+    if [ $? -eq 0 ]; then
+
+        echo -n 'Running FauxPas...'
+
+        if [ "$projectCount" = "1" ]
+        then
+
+            fauxpas -o json check $projectFile --workspace $workspaceFile --scheme $appScheme > sonar-reports/fauxpas.json
+
+
+        else
+
+            echo $projectFile | sed -n 1'p' | tr ',' '\n' > tmpFileRunSonarSh
+            while read projectName; do
+
+                $XCODEBUILD_CMD -list -project $projectName | sed -n '/Schemes/,$p' | while read scheme
+                do
+
+                if [ "$scheme" = "" ]
+                then
+                exit
+                fi
+
+                if [ "$scheme" == "${scheme/Schemes/}" ]
+                then
+                    if [ "$scheme" != "$testScheme" ]
+                    then
+                        projectBaseDir=$(dirname $projectName)
+                        workspaceRelativePath=$(python -c "import os.path; print os.path.relpath('$workspaceFile', '$projectBaseDir')")
+                        fauxpas -o json check $projectName --workspace $workspaceRelativePath --scheme $scheme > sonar-reports/$(basename $projectName .xcodeproj)-$scheme-fauxpas.json
+                    fi
+                fi
+
+                done
+
+            done < tmpFileRunSonarSh
+            rm -rf tmpFileRunSonarSh
+
+	    fi
+
+    else
+        echo 'Skipping FauxPas (not installed)'
+    fi
+else
+    echo 'Skipping FauxPas'
 fi
 
 # Lizard Complexity
