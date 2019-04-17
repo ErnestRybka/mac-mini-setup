@@ -30,6 +30,7 @@ TAILOR_CMD=tailor
 XCPRETTY_CMD=xcpretty
 LIZARD_CMD=lizard
 XCODEBUILD_CMD=xcodebuild
+workDir=$2
 
 
 trap "echo 'Script interrupted by Ctrl+C'; stopProgress; exit 1" SIGHUP SIGINT SIGTERM
@@ -141,7 +142,7 @@ function runCommand() {
 }
 
 ## COMMAND LINE OPTIONS
-vflag="on"
+vflag=""
 nflag=""
 unittests="off"
 swiftlint="on"
@@ -304,7 +305,6 @@ if [ "$unittests" = "on" ]; then
     fi
 fi
 if [ "$vflag" = "on" ]; then
-
     runCommand  sonar-reports/xcodebuild.log "${buildCmd[@]}"
     cat sonar-reports/xcodebuild.log  | $XCPRETTY_CMD -t --report junit
     mv build/reports/junit.xml sonar-reports/TEST-report.xml
@@ -335,12 +335,11 @@ if [ "$vflag" = "on" ]; then
     slatherCmd+=( --input-format profdata $excludedCommandLineFlags --cobertura-xml --output-directory sonar-reports)
 
     if [[ ! -z "$workspaceFile" ]]; then
-        slatherCmd+=( --verbose --workspace "$workspaceFile")
+        slatherCmd+=( --workspace "$workspaceFile")
     fi
-    slatherCmd+=( --build-directory /Users/jenkins/Library/Developer/Xcode/DerivedData/)
-    slatherCmd+=( --binary-file $1/build_result/Velocigene.app/Velocigene)
+	slatherCmd+=( --build-directory /Users/jenkins/Library/Developer/Xcode/DerivedData/)
+	slatherCmd+=( --binary-file $workDir/build_result/Velocigene.app/Velocigene)
     slatherCmd+=( --scheme "$appScheme" "$firstProject")
-    
 
     echo "${slatherCmd[@]}"
 
