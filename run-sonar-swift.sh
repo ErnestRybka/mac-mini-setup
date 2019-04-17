@@ -338,7 +338,7 @@ if [ "$vflag" = "on" ]; then
         slatherCmd+=( --verbose --workspace "$workspaceFile")
     fi
     slatherCmd+=( --build-directory /Users/jenkins/Library/Developer/Xcode/DerivedData/)
-    slatherCmd+=( --binary-file ${vars.workDir}/build_result/Velocigene.app/Velocigene)
+    slatherCmd+=( --binary-file $1/build_result/Velocigene.app/Velocigene)
     slatherCmd+=( --scheme "$appScheme" "$firstProject")
     
 
