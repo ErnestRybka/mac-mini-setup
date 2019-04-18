@@ -12,7 +12,6 @@ opt_in_rules: # some rules are only opt-in
   - empty_parameters
   - force_cast
   - force_try
-  # - force_unwrapping
   - function_body_length
   - identifier_name
   - implicit_getter
